@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "masterexpertadvisor"
+version = "0.1.0"
+description = "A tool for developing, optimizing, testing and deploying Expert Advisors for Algorithmic Trading"
+authors = ["jjeg1979 <jjeg1979@gmail.com>"]
+license = "GPLv3"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+yfinance = "^0.2.21"
+pytest = "^7.3.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
