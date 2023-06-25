@@ -10,8 +10,21 @@ readme = "README.md"
 python = "^3.11"
 yfinance = "^0.2.21"
 pytest = "^7.3.2"
+metatrader5 = "^5.0.45"
+numpy = "^1.25.0"
+pandas = "^2.0.2"
+pylint = "^2.17.4"
+pytest-mock = "^3.11.1"
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.pyright]
+reportMissingTypeStubs = false
+reportGeneralTypeIssues = false
+reportUnknownVariableType  = false
+reportUntypedBaseClass = false
+reportUnknownMemberType = false
