@@ -92,5 +92,4 @@ class TestYahooFinanceExchange:
         WHEN: The disconnect_from_exchange method is called.
         THEN: None is returned."""
         yf_exchange = YFinanceExchange()
-        result = yf_exchange.disconnect_from_exchange()
-        assert result is None
+        assert yf_exchange.disconnect_from_exchange() is None
