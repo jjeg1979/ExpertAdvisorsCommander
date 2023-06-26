@@ -10,5 +10,6 @@ disable=missing-function-docstring,
         unused-variable,
         no-member,
         line-too-long,
+        logging-fstring-interpolation,
 [FORMAT]
 good-names=i,j,x,y,id,p,c1,c2,c3

@@ -6,7 +6,8 @@ import pandas as pd
 import pytest
 
 from pytest_mock import MockerFixture
-from src.exchange.mt5_exchange import MT5Exchange, InvalidTimeFrameError
+from src.exchange.exchange import InvalidTimeFrameError
+from src.exchange.mt5_exchange import MT5Exchange
 
 
 class TestMT5Exchange:
