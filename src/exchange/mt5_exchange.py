@@ -1,11 +1,12 @@
 """Concrete Implementation of the Exchange Protocol"""
-
+import logging
 from datetime import datetime
 import pandas as pd
 
 import MetaTrader5 as mt5
 
-from src.exchange.constants import TimeFrames
+from src.exchange.exchange import ExchangeEngine, InvalidTimeFrameError
+
 
 MT5_TIMEFRAMES: dict[str, int] = {
     "M1": mt5.TIMEFRAME_M1,
@@ -26,14 +27,7 @@ MT5_TIMEFRAMES: dict[str, int] = {
 }
 
 
-class InvalidTimeFrameError(Exception):
-    """Raised when the timeframe is not valid"""
-
-    def __init__(self, message: str = "Invalid Timeframe") -> None:
-        super().__init__(message)
-
-
-class MT5Exchange:
+class MT5Exchange(ExchangeEngine):
     def get_prices(
         self, symbol: str, timeframe: str, time_from: datetime, time_to: datetime
     ) -> pd.DataFrame:
@@ -41,9 +35,9 @@ class MT5Exchange:
         # TODO: Refactor this function ==> Low cohesion and high coupling
         if not self.connect_to_exchange():
             return pd.DataFrame()
-        is_valid_tf = self.is_timeframe_valid(timeframe)
-        if not is_valid_tf:
-            raise InvalidTimeFrameError()
+
+        if not self.is_timeframe_valid(timeframe):
+            raise InvalidTimeFrameError(f"Invalid timeframe {timeframe}")
         tf_mt5 = MT5_TIMEFRAMES[timeframe]
         rates = mt5.copy_rates_range(  # type: ignore
             symbol, tf_mt5, time_from, time_to
@@ -62,15 +56,11 @@ class MT5Exchange:
     def connect_to_exchange(self) -> bool:
         """Connect to the Metatrader Exchange"""
         if not mt5.initialize():  # type: ignore
-            print("initialize() failed, error code =", mt5.last_error())  # type:ignore
-            return False
+            mt5_error: str = mt5.last_error()  # type: ignore
+            logging.info(f"Initialize() failed, error code = {mt5_error}")  # type: ignore
         return True
 
-    def disconnet_from_exchange(self) -> None:
+    def disconnect_from_exchange(self) -> None:
         """Disconnect from the Metatrader Exchange"""
         if mt5.initialize():  # type:ignore
             mt5.disconnect()  # type:ignore
-
-    def is_timeframe_valid(self, timeframe: str) -> bool:
-        """Check if the timeframe is valid"""
-        return timeframe in TimeFrames.__members__  # type: ignore
